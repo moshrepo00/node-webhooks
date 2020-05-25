@@ -55,6 +55,7 @@ app.post('/webhook', function(req, res) {
     const hash = commitInfo.hash;
 
 
+
      let commit = new Commit({
         author: author,
         message: message,
@@ -64,7 +65,7 @@ app.post('/webhook', function(req, res) {
     commit.save().then(data => {
         Commit.find({}, function(err, commits) {
             if (err) return next(err);
-            res.status(200).json(commits);
+            res.status(200).json(req.body.push.changes[0].commits[0].hash);
             io.emit('commit', commits);
 
 	    });
