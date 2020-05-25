@@ -29,6 +29,13 @@ app.get('/', (req, res) => {
     io.emit('commit', 'My First Commit');
 });
 
+app.get('/commits', function(req, res) {
+      Commit.find({}, function(err, commits) {
+            if (err) return next(err);
+            res.status(200).json(commits);
+	    });
+})
+
 
 app.post('/webhook', function(req, res) {
     io.emit('commit', req.body);
