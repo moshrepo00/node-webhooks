@@ -46,7 +46,6 @@ app.get('/commits', function(req, res) {
 
 
 app.post('/webhook', function(req, res) {
-    io.emit('commit', req.body);
 
     const commitInfo = req.body.push.changes[0].commits[0];
 
@@ -66,10 +65,11 @@ app.post('/webhook', function(req, res) {
         Commit.find({}, function(err, commits) {
             if (err) return next(err);
             res.status(200).json(commits);
+            io.emit('commit', commits);
+
 	    });
     })
 });
-
 
 
 
