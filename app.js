@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 
 const http = require('http').Server(app);
@@ -14,10 +17,10 @@ app.get('/', (req, res) => {
 });
 
 
-app.post('/webook', (req, res) => {
+app.post('/webhook', function(req, res) {
     io.emit('commit', 'My First Commit');
-    res.status('200').send('web hook executed');
-})
+    res.status(200).send('Hook executed');
+});
 
 
 
