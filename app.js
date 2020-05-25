@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 app.get('/commits', function(req, res) {
       Commit.find({}, function(err, commits) {
             if (err) return next(err);
-            res.status(200).json(commits);
+            res.status(200).json(commits.reverse());
 	    });
 })
 
@@ -66,7 +66,7 @@ app.post('/webhook', function(req, res) {
         Commit.find({}, function(err, commits) {
             if (err) return next(err);
             res.status(200).json(req.body.push.changes[0].commits[0].hash);
-            io.emit('commit', commits);
+            io.emit('commit', commits.reverse());
 
 	    });
     })
