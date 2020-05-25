@@ -5,6 +5,19 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+// Set up mongoose connection
+const mongoose = require('mongoose');
+
+// Set up mongoose connection
+let dev_db_url = 'mongodb+srv://mos:test@cluster0-cgltt.mongodb.net/Commit-DB?retryWrites=true';
+let mongoDB = process.env.MONGODB_URI || dev_db_url;
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+mongoose.Promise = global.Promise;
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+const Commit = require('./commit.model');
+
 
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -19,7 +32,27 @@ app.get('/', (req, res) => {
 
 app.post('/webhook', function(req, res) {
     io.emit('commit', req.body);
-    res.status(200).send('Hook executed');
+
+    const commitInfo = req.body.push.changes[0].commits[0];
+
+    const author = commitInfo.author.user.display_name;
+    const date = commitInfo.message;
+    const message = commitInfo.message;
+    const hash = commitInfo.hash;
+
+
+     let commit = new Commit({
+        author: author,
+        message: message,
+        hash: hash,
+        date: date
+    });
+    commit.save().then(data => {
+        Commit.find({}, function(err, commits) {
+            if (err) return next(err);
+            res.status(200).json(commits);
+	    });
+    })
 });
 
 
