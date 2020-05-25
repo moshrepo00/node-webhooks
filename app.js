@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 app.post('/webhook', function(req, res) {
     io.emit('commit', 'My First Commit');
-    res.status(200).send('Hook executed');
+    res.status(200).json(req.body);
 });
 
 
