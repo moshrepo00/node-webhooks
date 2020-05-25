@@ -50,7 +50,7 @@ app.post('/webhook', function(req, res) {
     const commitInfo = req.body.push.changes[0].commits[0];
 
     const author = commitInfo.author.user.display_name;
-    const date = commitInfo.message;
+    const date = commitInfo.date;
     const message = commitInfo.message;
     const hash = commitInfo.hash;
 
