@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
 
 
 app.post('/webook', (req, res) => {
+    io.emit('commit', 'My First Commit');
     res.status('200').send('web hook executed');
 })
 
