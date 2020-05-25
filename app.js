@@ -14,6 +14,11 @@ app.get('/', (req, res) => {
 });
 
 
+app.post('/webook', (req, res) => {
+    res.status('200').send('web hook executed');
+})
+
+
 
 http.listen(process.env.PORT || 8080, () => {
 	console.log('server is running on port 8080');
